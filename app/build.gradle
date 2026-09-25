@@ -1,0 +1,61 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.example.cadreader'
+    compileSdk 35
+
+    defaultConfig {
+        applicationId 'com.example.cadreader'
+        minSdk 26
+        targetSdk 35
+        versionCode 64
+        versionName '1.64-test'
+    }
+}
+
+dependencies {
+    implementation 'androidx.webkit:webkit:1.12.1'
+}
+
+// DWG runtime assets are pinned and copied into the APK at build time.
+// This avoids downloading the DWG engine when the app is running.
+def dwgVersion = '0.7.14'
+def dwgAssetRoot = file('src/main/assets/dwg')
+def dwgDistDir = new File(dwgAssetRoot, 'dist')
+def dwgWasmDir = new File(dwgAssetRoot, 'wasm')
+
+tasks.register('prepareDwgAssets') {
+    outputs.files(
+        new File(dwgDistDir, 'libredwg-web.js'),
+        new File(dwgWasmDir, 'libredwg-web.wasm')
+    )
+
+    doLast {
+        dwgDistDir.mkdirs()
+        dwgWasmDir.mkdirs()
+
+        def files = [
+            [
+                url: "https://cdn.jsdelivr.net/npm/@mlightcad/libredwg-web@${dwgVersion}/dist/libredwg-web.js",
+                out: new File(dwgDistDir, 'libredwg-web.js')
+            ],
+            [
+                url: "https://cdn.jsdelivr.net/npm/@mlightcad/libredwg-web@${dwgVersion}/wasm/libredwg-web.wasm",
+                out: new File(dwgWasmDir, 'libredwg-web.wasm')
+            ]
+        ]
+
+        files.each { item ->
+            if (!item.out.exists() || item.out.length() == 0) {
+                logger.lifecycle("DWG asset indiriliyor: ${item.out.name}")
+                item.out.withOutputStream { os ->
+                    new URL(item.url).withInputStream { input -> input.transferTo(os) }
+                }
+            }
+        }
+    }
+}
+
+preBuild.dependsOn tasks.named('prepareDwgAssets')
