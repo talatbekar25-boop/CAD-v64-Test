@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
-<title>CAD Reader Android v64</title>
+<title>CAD Reader Android v66</title>
 <style>
 html,body{margin:0;height:100%;font-family:Arial,sans-serif;background:#101216;color:#fff}
 body{display:flex;flex-direction:column;overflow:hidden}
@@ -667,7 +667,7 @@ body.light33 #progressCostPanel62{background:#f8fafc!important;color:#18202a!imp
   <button id="toolsBtn" class="iconBtn"><span class="ico">🛠</span>⚒ Araçlar</button>
   <button id="layersBtn" class="iconBtn"><span class="ico">▤</span>☰ Katman</button>
   <button id="moreBtn" class="iconBtn"><span class="ico">•••</span>⋯ Diğer</button>
-  <div id="info">Android v64 • hakediş dönemleri ve kontrol</div>
+  <div id="info">Android v66 • kararlılık düzeltmeleri</div>
 </header>
 <div id="coordBar26"><div id="coord" style="flex:1">X: 0.00  Y: 0.00</div>
   <div id="toolHint18" style="font-size:10px;color:#7f8a99;margin-right:4px"></div><div id="activeTool" style="padding:3px 7px;border-radius:999px;background:#202731;color:#dce7f3">Taşı</div></div><div id="fileStatus27" style="padding:4px 8px;font-size:10px;color:#8290a0;background:#0f1419;border-bottom:1px solid #232b34">Dosya yok</div>
@@ -1069,6 +1069,11 @@ body.light33 #progressCostPanel62{background:#f8fafc!important;color:#18202a!imp
 <button id="mFree27" class="measureCat42 basic42">Serbest</button><button id="mH27" class="measureCat42 basic42">Yatay</button><button id="mV27" class="measureCat42 basic42">Dikey</button><button id="mAngle27" class="measureCat42 area42">Açı</button><button id="mArea27" class="measureCat42 area42">Alan / Çevre</button><button id="mCancel27">İptal</button></div></div>
   <div id="toast"></div>
 </div>
+
+<div id="miniMapWrap58">
+  <canvas id="miniMap58" width="180" height="120"></canvas>
+  <button id="miniMapToggle58" title="Mini harita">Harita</button>
+</div>
 <script>
 (()=>{
 const canvas=document.getElementById('cv'),ctx=canvas.getContext('2d');
@@ -1082,9 +1087,33 @@ let entities=[],view={scale:1,ox:0,oy:0},bounds=null;
 let perfCache11={stamp:'',visible:[],grid:null};
 const MAX_VISIBLE_DRAW11=25000;
 let dwgMode=false,dwgEnginePromise=null;
-let mode='pan',selectedEntity=null,measurements=[],selectedMeasure=-1,pendingMeasure=null;updateLiveMeasure46(null,null);
+let mode='pan',selectedEntity=null,measurements=[],selectedMeasure=-1,pendingMeasure=null;
 let anglePts=[],areaPts=[];
 let areaMeasurements=[];
+let snapMode30={end:true,mid:true,center:true,intersection:true};
+let layerVersionV12=0;
+let measureCategory42='basic42';
+const PREFS_KEY29='cadReaderPrefs29';
+let theme33='dark';
+let perf33='balanced';
+let bboxCacheV12=new WeakMap();
+let visibleCacheV12={key:'',items:[]};
+let largeDwgActive49=false;
+let drawLimit34=8000;
+let showLinear22=true,showArea22=true;
+let measureFilter35='all';
+let liveStart46=null;
+let miniMapVisible58=true;
+let takeoffHighlight61=true;
+let takeoffItems51=[];
+let drawingUnit41='auto';
+let unitScale41=1.0;        // drawing units -> mm
+let calibrationScale41=1.0;
+let measureFont43=12;
+let measureColor43='#58a6ff';
+let ortho46=false;
+let angleStep46=0;
+let livePoint46=null;
 let gridOn=true, unit='mm', snapPx=16, labelDrag=null, ortho=false;
 let liveSnap=null,assistPointer=null;
 let history=[],future=[];
@@ -1107,12 +1136,100 @@ function restoreStack(stackFrom, stackTo){if(!stackFrom.length)return false;stac
 
 const colors={DUVAR:'#e8eef7',KAPI:'#f0b66d',PENCERE:'#6eb7e8',KOLON:'#d8d86e',MOBILYA:'#8fd18f',YAZI:'#d9a8ff',OLCU:'#ffb36a',HATCH:'#8b96a8',TESISAT:'#ef8d8d',ELEKTRIK:'#f1dc65'};
 const colorFor=e=>colors[e.layer]||'#d6dbe3';
+const sx=x=>view.ox+x*view.scale, sy=y=>view.oy-y*view.scale;
+const wx=x=>(x-view.ox)/view.scale, wy=y=>(view.oy-y)/view.scale;
+let layerCounts14={};
+let layerFilter14='';
+let layerVisibilityBackup15=null;
+const measureMenu27=document.getElementById('measureMenu27');
+const measureMain27=document.getElementById('bMeasureMain');
+let lastMeasureMode27='measure';
+let longTimer27=null,longOpened27=false;
+let lastFileName16='';
+let undo17=[],redo17=[];
+let selectedArea20=-1;
+let undoGuard17=false;
+const SESSION_PREFIX29='cadReaderSession29:';
+let dwgOpenBusy30=false;
+let dwgOpenToken30=0;
+let snapCache30={key:'',items:[]};
+let lastSnap31=null;
+const SNAP_PRIORITY31={Kesişim:5,Uç:4,Merkez:3,Orta:2,Nokta:2,Serbest:0};
+const RECENTS_KEY35='cadReaderRecents35';
+let recentFiles35=[];
+const FAVORITES_KEY36='cadReaderFavorites36';
+let favorites36=[];
+let recentSearch36='';
+const LAYER_FAV_KEY37='cadReaderLayerFav37';
+let favoriteLayers37=[];
+let favoriteLayersOnly37=false;
+let selectedLayers38=new Set();
+let chainPts39=[];
+let multiPts39=[];
+let radiusCandidate39=null;
+let angleLines40=[];
+let fullscreen45=false;
+let dwgLastError47='';
+let dwgOpenStartedAt47=0;
+let lastDwgFile48=null;
+let lastDwgMeta48=null;
+let largeDwgMode49='auto';
+let largeDwgEntityLimit49=12000;
+let lodMode50='auto';
+let viewportMargin50=120;
+let takeoffGroup52='none';
+let takeoffFilter52='all';
+const TAKEOFF_STORE53='cadReaderTakeoff53';
+let takeoffCurrency54='TRY';
+let takeoffDefaultCategory54='Genel';
+let takeoffUnitMode55='auto';
+const RECOVERY_KEY56='cadReaderRecovery56';
+let recoveryTimer56=null;
+let lastRecoverySave56=0;
+const VIEW_PRESET_KEY57='cadReaderViewPresets57';
+let viewPresets57=[];
+let miniMapBounds58=null;
+let selectedTakeoff59=new Set();
+let takeoffDiscount59=0;
+let takeoffVat59=20;
+let takeoffSearch60='';
+let takeoffSort60='default';
+let takeoffDuplicateGuard61=true;
+const PROGRESS_KEY62='cadReaderProgress62';
+let progressItems62=[];
+const PROGRESS_META64='cadReaderProgressMeta64';
+let progressMeta64={project:'',period:'',history:[]};
+
+// ===== Android v66: runtime kararlılık düzeltmeleri =====
+let dwgMode30=false;
+const dwgSvgLayer30=dwgLayer;
+let drawRaf32=0;
+
+function getPos(ev){
+  const r=canvas.getBoundingClientRect();
+  return {x:ev.clientX-r.left,y:ev.clientY-r.top};
+}
+function requestDraw32(){
+  if(drawRaf32)return;
+  drawRaf32=requestAnimationFrame(()=>{drawRaf32=0;draw();});
+}
+function updateDwgTransform30(){
+  const svg=dwgLayer?.querySelector?.('svg');
+  if(svg)svg.style.transform=`translate(${view.ox}px,${view.oy}px) scale(${view.scale})`;
+}
+function leaveDwgMode30(){
+  dwgMode30=false;
+  dwgMode=false;
+  if(dwgLayer)dwgLayer.style.display='none';
+}
+async function getDwgLib30(){
+  const loaded=await getDwgEngine();
+  return {lib:loaded.lib,Dwg_File_Type:loaded.mod?.Dwg_File_Type,mod:loaded.mod};
+}
 
 function resize(){const r=canvas.getBoundingClientRect(),dpr=Math.max(1,devicePixelRatio||1);canvas.width=Math.round(r.width*dpr);canvas.height=Math.round(r.height*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);draw()}
 addEventListener('resize',resize);
 
-const sx=x=>view.ox+x*view.scale, sy=y=>view.oy-y*view.scale;
-const wx=x=>(x-view.ox)/view.scale, wy=y=>(view.oy-y)/view.scale;
 
 function calcBounds(){
  let minX=Infinity,minY=Infinity,maxX=-Infinity,maxY=-Infinity;
@@ -1146,7 +1263,7 @@ function sampleProject(){
  undo17=[];redo17=[];
  layerVisibilityBackup15=null;
  document.getElementById('restoreLayers15')?.style && (document.getElementById('restoreLayers15').style.display='none');
- dwgMode=false;dwgLayer.style.display='none';dwgLayer.innerHTML='';
+ dwgMode=false;dwgMode30=false;dwgLayer.style.display='none';dwgLayer.innerHTML='';
  entities=[];invalidatePerf11();measurements=[];history=[];future=[];selectedMeasure=-1;selectedEntity=null;updateSmartInfo51(null);
  // outer walls + rooms
  poly([[0,0],[120,0],[120,80],[0,80]],'DUVAR',true);
@@ -1181,8 +1298,6 @@ function showToast(t){toast.textContent=t;toast.style.display='block';clearTimeo
 
 
 // ===== Android v14: hızlı katman yönetimi =====
-let layerCounts14={};
-let layerFilter14='';
 
 function rebuildLayerCounts14(){
   layerCounts14={};
@@ -1202,7 +1317,6 @@ function setAllLayers14(value){
 
 
 // ===== Android v15: katman izole / görünürlük geri yükleme =====
-let layerVisibilityBackup15=null;
 
 function layerColor15(name){
   let sample=entities.find(e=>(e.layer||'0')===name);
@@ -1640,8 +1754,8 @@ function setMode(m){
  ['bPan','bSelect','bV'].forEach(id=>document.getElementById(id)?.classList.remove('active'));
  if(m==='pan')document.getElementById('bPan')?.classList.add('active');
  if(m==='select')document.getElementById('bSelect')?.classList.add('active');
- if(m==='measure')if(m==='measureH')if(m==='measureV')document.getElementById('measureAngle').classList.toggle('active',m==='angle');
- document.getElementById('measureArea').classList.toggle('active',m==='area');
+ document.getElementById('measureAngle')?.classList.toggle('active',m==='angle');
+ document.getElementById('measureArea')?.classList.toggle('active',m==='area');
  const label=m==='select'?'Seçim':m==='measure'?'Serbest Ölçüm':m==='measureH'?'Yatay Ölçüm':m==='measureV'?'Dikey Ölçüm':m==='angle'?'Açı Ölçümü':m==='area'?'Alan Ölçümü':'Taşı';
  activeTool.textContent=label;refreshStatus28();document.getElementById('toolHint18').textContent=(m==='pan'?'Gezinme':m==='select'?'Nesne':m==='area'?'Alan/Çevre':m==='radius39'?'Yarıçap/Çap':m==='chain39'?'Zincir':m==='multi39'?'Toplam':m==='arcLen40'?'Yay':m==='angle2L40'?'Açı':'Ölçüm');
  showToast(label);
@@ -1650,19 +1764,19 @@ function setMode(m){
 canvas.addEventListener('pointerdown',e=>{
 
  if(mode==='arcLen40'){
-   const p40=getPos(ev);
+   const p40=getPos(e);
    const e40=selectionCandidates31(p40.x,p40.y).find(e=>e.type==='ARC');
    if(e40)addArcLengthMeasure40(e40);else showToast('Bir yay seç');
    return;
  }
  if(mode==='angle2L40'){
-   const p40=getPos(ev);
+   const p40=getPos(e);
    const e40=hitEntity(p40.x,p40.y);
    addAngleBetweenLines40(e40);
    return;
  }
 
- const p39=getPos(ev);
+ const p39=getPos(e);
  if(mode==='radius39'){
    const e39=nearestCircularEntity39(p39.x,p39.y);
    if(e39)addRadiusMeasure39(e39); else showToast('Daire veya yay seç');
@@ -1688,7 +1802,7 @@ canvas.addEventListener('pointerdown',e=>{
 });
 canvas.addEventListener('pointermove',e=>{
 
- const lp46=getPos(ev);
+ const lp46=getPos(e);
  if(['measure','measureH','measureV','chain39','multi39'].includes(mode)){
    const sp46=snapPoint(lp46.x,lp46.y);
    let qp46={x:sp46.x,y:sp46.y};
@@ -1699,7 +1813,7 @@ canvas.addEventListener('pointermove',e=>{
    if(ap46){
      qp46=constrainPoint46(ap46,qp46);
      updateLiveMeasure46(ap46,qp46);
-     requestDraw32?.();
+     requestDraw32();
    }else updateLiveMeasure46(null,null);
  }
  const rr=canvas.getBoundingClientRect(),cp={x:e.clientX-rr.left,y:e.clientY-rr.top};coord.textContent=`X: ${wx(cp.x).toFixed(2)}  Y: ${wy(cp.y).toFixed(2)}`;
@@ -1984,7 +2098,7 @@ async function openDwg(file){
     const db=lib.convert(dwg);
    const bridged=typeof extractDwgEntitiesV3==='function'?extractDwgEntitiesV3(db):[];
    if(bridged.length){
-     dwgMode=false;
+     dwgMode=false;dwgMode30=false;
      dwgLayer.style.display='none';
      dwgLayer.innerHTML='';
      activateCommonEntitiesV3(bridged,file.name);
@@ -2000,7 +2114,7 @@ async function openDwg(file){
    svg.setAttribute('preserveAspectRatio','xMidYMid meet');
    dwgLayer.innerHTML='';dwgLayer.appendChild(document.importNode(svg,true));
    entities=[];invalidatePerf11();pushUndo17();measurements=[];areaMeasurements=[];selectedEntity=null;selectedMeasure=-1;selectedArea20=-1;pendingMeasure=null;
-   dwgMode=true;bounds=null;view={scale:1,ox:0,oy:0};
+   dwgMode=true;dwgMode30=true;bounds=null;view={scale:1,ox:0,oy:0};
    dwgLayer.style.display='block';empty.style.display='none';startScreen.style.display='none';
    refreshMeasureList();refreshStatus28();draw();lastFileName16=file.name;rememberRecent35(file.name);updateRecentFile16(file.name);updateFileStatus27(file.name);refreshStatus28();restoreSession29(file.name);showInfo(`${file.name} • DWG açıldı`);showToast('DWG açıldı');
  }finally{if(dwg)try{lib.dwg_free(dwg)}catch(e){}}
@@ -2276,10 +2390,6 @@ document.getElementById('deleteMeasure').onclick=()=>{if(selectedMeasure>=0){sna
 
 
 // ===== v27: uzun basmalı ölçüm menüsü =====
-const measureMenu27=document.getElementById('measureMenu27');
-const measureMain27=document.getElementById('bMeasureMain');
-let lastMeasureMode27='measure';
-let longTimer27=null,longOpened27=false;
 
 function openMeasureMenu27(){
   measureMenu27.style.display='block';
@@ -2368,7 +2478,6 @@ initRecovery56();
 loadViewPresets57();
 setTimeout(()=>drawMiniMap58(),250);
 resize();refreshMeasureList();setMode('pan');startScreen.style.display='flex';
-})();
 
 function autoDimension241(){
   const e=selectedEntity;
@@ -2566,7 +2675,7 @@ function extractDwgEntitiesV3(db){
 }
 
 function activateCommonEntitiesV3(list,fileName='DWG'){
-  dwgMode=false;
+  dwgMode=false;dwgMode30=false;
   if(dwgLayer){dwgLayer.style.display='none';dwgLayer.innerHTML='';}
   entities=list||[];invalidatePerfCachesV12();invalidatePerf11();
   applyDwgLayerVisibilityV5(entities);
@@ -2770,9 +2879,6 @@ function invalidatePerf11(){perfCache11.stamp='';}
 
 
 // ===== Android v12 performans katmanı =====
-let bboxCacheV12=new WeakMap();
-let layerVersionV12=0;
-let visibleCacheV12={key:'',items:[]};
 
 function bboxV12(e){
   if(!e||typeof e!=='object')return null;
@@ -2854,7 +2960,6 @@ function friendlyErrorV13(err,kind='CAD'){
 
 
 // ===== Android v16: hızlı dosya akışı =====
-let lastFileName16='';
 
 function updateRecentFile16(name=''){
   if(name)lastFileName16=name;
@@ -2882,10 +2987,6 @@ function newDrawing16(){
 
 
 // ===== Android v17: birleşik ölçüm geçmişi =====
-let undo17=[],redo17=[];
-let selectedArea20=-1;
-let showLinear22=true,showArea22=true;
-let undoGuard17=false;
 
 function captureState17(){
   return {
@@ -3077,8 +3178,6 @@ function refreshStatus28(){
 
 
 // ===== Android v29: yerel ayar ve ölçü taslağı kaydı =====
-const PREFS_KEY29='cadReaderPrefs29';
-const SESSION_PREFIX29='cadReaderSession29:';
 
 function safeStorageGet29(key){
   try{return localStorage.getItem(key)}catch(e){return null}
@@ -3156,8 +3255,6 @@ function autosaveSession29(){
 
 window.addEventListener('beforeunload',()=>{savePrefs29();autosaveSession29();});
 
-let dwgOpenBusy30=false;
-let dwgOpenToken30=0;
 function validateDwgHeader30(buf){
   const bytes=new Uint8Array(buf,0,Math.min(16,buf.byteLength));
   const sig=String.fromCharCode(...bytes.slice(0,6));
@@ -3177,8 +3274,6 @@ function setDwgBusy30(busy,msg=''){
 
 
 
-let snapMode30={end:true,mid:true,center:true,intersection:true};
-let snapCache30={key:'',items:[]};
 function visibleForSnap30(){
   const key=[view.scale.toFixed(4),view.ox.toFixed(1),view.oy.toFixed(1),entities.length,layerVersionV12].join('|');
   if(key===snapCache30.key)return snapCache30.items;
@@ -3210,8 +3305,6 @@ function toggleSnap30(key){snapMode30[key]=!snapMode30[key];refreshSnapButtons30
 
 
 // ===== Android v31: snap önceliği ve seçim hızlandırma =====
-let lastSnap31=null;
-const SNAP_PRIORITY31={Kesişim:5,Uç:4,Merkez:3,Orta:2,Nokta:2,Serbest:0};
 
 function betterSnap31(current,candidate,dCurrent,dCandidate){
   const pc=SNAP_PRIORITY31[current?.kind]||0;
@@ -3235,8 +3328,6 @@ function selectionCandidates31(px,py){
 }
 
 
-let theme33='dark';
-let perf33='balanced';
 
 function applyTheme33(){
   document.body.classList.toggle('light33',theme33==='light');
@@ -3280,7 +3371,6 @@ function resetSettings33(){
 
 
 // ===== Android v34: gelişmiş ayarlar =====
-let drawLimit34=8000;
 
 function applyAdvancedSettings34(){
   const slider=document.getElementById('snapTol34');
@@ -3319,8 +3409,6 @@ function currentDrawLimit34(){
 
 
 // ===== Android v35: son dosyalar ve filtreler =====
-const RECENTS_KEY35='cadReaderRecents35';
-let recentFiles35=[];
 
 function loadRecents35(){
   const raw=safeStorageGet29(RECENTS_KEY35);
@@ -3394,7 +3482,6 @@ function renderRecents35(){
   }
 }
 
-let measureFilter35='all';
 function setMeasureFilter35(v){
   measureFilter35=v;
   [['mfAll35','all'],['mfLinear35','linear'],['mfArea35','area']].forEach(([id,key])=>{
@@ -3405,9 +3492,6 @@ function setMeasureFilter35(v){
 
 
 // ===== Android v36: favoriler + son dosya arama =====
-const FAVORITES_KEY36='cadReaderFavorites36';
-let favorites36=[];
-let recentSearch36='';
 
 function loadFavorites36(){
   const raw=safeStorageGet29(FAVORITES_KEY36);
@@ -3437,9 +3521,6 @@ function clearRecents36(){
 
 
 // ===== Android v37: favori katmanlar =====
-const LAYER_FAV_KEY37='cadReaderLayerFav37';
-let favoriteLayers37=[];
-let favoriteLayersOnly37=false;
 
 function loadLayerFavorites37(){
   const raw=safeStorageGet29(LAYER_FAV_KEY37);
@@ -3470,7 +3551,6 @@ function setFavoriteLayersOnly37(v){
 
 
 // ===== Android v38: çoklu katman işlemleri =====
-let selectedLayers38=new Set();
 
 function toggleLayerSelected38(name,checked){
   if(checked)selectedLayers38.add(name);
@@ -3507,9 +3587,6 @@ function favoriteSelectedLayers38(){
 
 
 // ===== Android v39: gelişmiş ölçüm modları =====
-let chainPts39=[];
-let multiPts39=[];
-let radiusCandidate39=null;
 
 function setMeasureInfo39(text){
   const el=document.getElementById('measureModeInfo39');
@@ -3640,7 +3717,6 @@ canvas.addEventListener('dblclick',ev=>{
 
 
 // ===== Android v40: yay uzunluğu, iki doğru açısı, ölçü notu =====
-let angleLines40=[];
 
 function arcLength40(e){
   if(!e || e.type!=='ARC')return 0;
@@ -3729,9 +3805,6 @@ function saveMeasureNote40(){
 
 
 // ===== Android v41: çizim birimi ve kalibrasyon =====
-let drawingUnit41='auto';
-let unitScale41=1.0;        // drawing units -> mm
-let calibrationScale41=1.0;
 
 function unitToMm41(u){
   if(u==='mm')return 1;
@@ -3841,7 +3914,6 @@ function loadScaleSettings41(){
 
 
 // ===== Android v42: kategorili ölçü menüsü =====
-let measureCategory42='basic42';
 
 function setMeasureCategory42(cat){
   measureCategory42=cat;
@@ -3888,8 +3960,6 @@ if(!CanvasRenderingContext2D.prototype.roundRect){
 
 
 // ===== Android v43: ölçü stili =====
-let measureFont43=12;
-let measureColor43='#58a6ff';
 
 function applyMeasureStyle43(){
   const fs=document.getElementById('measureFont43');
@@ -3962,7 +4032,6 @@ function visibleMeasurementCount44(){
 }
 
 
-let fullscreen45=false;
 function setFullscreen45(v){
   fullscreen45=!!v;
   document.body.classList.toggle('drawingFullscreen45',fullscreen45);
@@ -3985,10 +4054,6 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&fullscreen45)setFul
 
 
 // ===== Android v46: Ortho / açı kilidi / canlı ölçü =====
-let ortho46=false;
-let angleStep46=0;
-let liveStart46=null;
-let livePoint46=null;
 
 function refreshMeasureLocks46(){
   const o=document.getElementById('ortho46');
@@ -4061,8 +4126,6 @@ function drawLiveMeasure46(){
 
 
 // ===== Android v47: DWG açılış güçlendirme =====
-let dwgLastError47='';
-let dwgOpenStartedAt47=0;
 
 function dwgSignatureInfo47(buf){
   const bytes=new Uint8Array(buf,0,Math.min(32,buf.byteLength));
@@ -4164,7 +4227,7 @@ function finalizeDwgSvg47(file,svgString,info){
   areaMeasurements=[];
   bounds=null;
   layerVisible={};
-  dwgMode30=true;
+  dwgMode30=true;dwgMode=true;
   view={scale:1,ox:0,oy:0};
   empty.style.display='none';
   startScreen.style.display='none';
@@ -4260,8 +4323,6 @@ function refreshDwgDiag47(){
 
 
 // ===== Android v48: DWG tanılama ve tekrar deneme =====
-let lastDwgFile48=null;
-let lastDwgMeta48=null;
 
 function formatBytes48(n){
   n=Number(n||0);
@@ -4314,9 +4375,6 @@ function warnLargeDwg48(file){
 
 
 // ===== Android v49: büyük DWG performans yönetimi =====
-let largeDwgMode49='auto';
-let largeDwgActive49=false;
-let largeDwgEntityLimit49=12000;
 
 function chooseLargeDwgProfile49(file){
   const mb=(file?.size||0)/(1024*1024);
@@ -4372,8 +4430,6 @@ function loadLargeDwgMode49(){
 
 
 // ===== Android v50: akıllı LOD ve viewport önceliği =====
-let lodMode50='auto';
-let viewportMargin50=120;
 
 function currentLodLevel50(){
   if(lodMode50==='full')return 'full';
@@ -4412,7 +4468,6 @@ function loadLodMode50(){
 }
 
 
-let takeoffItems51=[];
 
 function entityPolylinePoints51(e){
   if(!e)return [];
@@ -4545,8 +4600,6 @@ function focusTakeoffSelected51(){
 
 
 // ===== Android v52: gelişmiş metraj gruplama =====
-let takeoffGroup52='none';
-let takeoffFilter52='all';
 
 function filteredTakeoff52(){
   return takeoffItems51.filter(item=>{
@@ -4670,7 +4723,6 @@ function renderTakeoff51(){
 
 
 // ===== Android v53: metraj kayıt ve dışa aktarma =====
-const TAKEOFF_STORE53='cadReaderTakeoff53';
 
 function saveTakeoff53(){
   const name=String(document.getElementById('takeoffProject53')?.value||'Metraj').trim()||'Metraj';
@@ -4742,8 +4794,6 @@ function editTakeoffNote53(item){
 
 
 // ===== Android v54: metraj maliyet hesabı =====
-let takeoffCurrency54='TRY';
-let takeoffDefaultCategory54='Genel';
 
 function currencySymbol54(){
   if(takeoffCurrency54==='USD')return '$';
@@ -4823,7 +4873,6 @@ function loadCostPrefs54(){
 }
 
 
-let takeoffUnitMode55='auto';
 
 function itemQuantityMode55(item){
   const mode=item.unitMode55||takeoffUnitMode55||'auto';
@@ -4890,9 +4939,6 @@ function renderCategoryCostSummary55(){
 
 
 // ===== Android v56: otomatik kurtarma ve güvenli oturum =====
-const RECOVERY_KEY56='cadReaderRecovery56';
-let recoveryTimer56=null;
-let lastRecoverySave56=0;
 
 function snapshotRecovery56(){
   try{
@@ -5021,8 +5067,6 @@ setInterval(cleanupTransient56,30000);
 
 
 // ===== Android v57: favori görünümler =====
-const VIEW_PRESET_KEY57='cadReaderViewPresets57';
-let viewPresets57=[];
 
 function loadViewPresets57(){
   const raw=safeStorageGet29(VIEW_PRESET_KEY57);
@@ -5119,8 +5163,6 @@ function renderViewPresets57(){
 
 
 // ===== Android v58: mini harita ve hızlı gezinme =====
-let miniMapVisible58=true;
-let miniMapBounds58=null;
 
 function computeMiniMapBounds58(){
   try{
@@ -5247,9 +5289,6 @@ function toggleMiniMap58(){
 
 
 // ===== Android v59: gelişmiş metraj yönetimi =====
-let selectedTakeoff59=new Set();
-let takeoffDiscount59=0;
-let takeoffVat59=20;
 
 function itemMultiplier59(item){
   const n=Number(item.multiplier59||1);
@@ -5343,8 +5382,6 @@ function loadFinancePrefs59(){
 
 
 // ===== Android v60: metraj hata düzeltmeleri, arama ve sıralama =====
-let takeoffSearch60='';
-let takeoffSort60='default';
 
 function effectiveLength60(item){
   return Number(item.length||0)*itemMultiplier59(item);
@@ -5377,8 +5414,6 @@ function refreshTakeoffAfterPrefs60(){
 
 
 // ===== Android v61: metraj tekrar koruması + çizim vurgusu =====
-let takeoffDuplicateGuard61=true;
-let takeoffHighlight61=true;
 
 function round61(v){
   const n=Number(v||0);
@@ -5485,8 +5520,6 @@ function refreshTakeoffGuardButtons61(){
 
 
 // ===== Android v62: Metraj / Hakediş & Maliyet ayrımı =====
-const PROGRESS_KEY62='cadReaderProgress62';
-let progressItems62=[];
 
 function loadProgress62(){
   const raw=safeStorageGet29(PROGRESS_KEY62);
@@ -5671,8 +5704,6 @@ function progressCompletion63(){
 
 
 // ===== Android v64: hakediş dönemleri + aşım kontrolü =====
-const PROGRESS_META64='cadReaderProgressMeta64';
-let progressMeta64={project:'',period:'',history:[]};
 
 function loadProgressMeta64(){
   const raw=safeStorageGet29(PROGRESS_META64);
@@ -5742,11 +5773,8 @@ function progressWarnings64(){
   }
 }
 
+})();
 </script>
 
-<div id="miniMapWrap58">
-  <canvas id="miniMap58" width="180" height="120"></canvas>
-  <button id="miniMapToggle58" title="Mini harita">Harita</button>
-</div>
 </body>
 </html>
