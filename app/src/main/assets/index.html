@@ -2128,8 +2128,8 @@ function parseDxf(text){
 async function getDwgEngine(){
  if(dwgEnginePromise)return dwgEnginePromise;
  dwgEnginePromise=(async()=>{
-   const mod=await import('./dwg/dist/libredwg-web.js');
-   const wasmBase=new URL('./dwg/wasm/',document.baseURI).href;
+   const mod=await import('./dwg/libredwg-web.js');
+   const wasmBase=new URL('./dwg/',document.baseURI).href;
    const lib=await mod.LibreDwg.create(wasmBase);
    return {mod,lib};
  })();
