@@ -656,6 +656,54 @@ body.light33 #progressCostPanel62{background:#f8fafc!important;color:#18202a!imp
 .progressHead64 input{min-width:0;border-radius:8px;border:1px solid #3b4958;background:#1d2630;color:#eef4f8;padding:8px}
 .progressWarning64{margin:0 0 8px;padding:8px;border-radius:9px;background:#4a371b;border:1px solid #7a5a27;color:#ffe0a0;font-size:10px;line-height:1.45}
 
+
+/* v68 - metraj panel usability */
+#takeoffPanel51{position:fixed!important;top:74px;right:14px;left:auto;width:min(460px,calc(100vw - 28px));max-width:calc(100vw - 28px);height:min(75vh,740px);max-height:calc(100dvh - 92px);box-sizing:border-box;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;z-index:1000!important;padding:12px!important;resize:both;min-width:300px;min-height:240px}
+#takeoffPanel51 *{box-sizing:border-box}
+#takeoffPanel51 .takeoffRow51{display:grid!important;grid-template-columns:22px minmax(0,1fr);gap:8px;align-items:start;padding:10px;margin:0 0 7px}
+#takeoffPanel51 .takeoffRow51 > div{min-width:0;overflow-wrap:anywhere;line-height:1.5}
+#takeoffPanel51 .takeoffRow51 > div strong{display:block;font-size:13px;margin-bottom:3px}
+#takeoffPanel51 .takeoffRow51 > div .sub19{font-size:11px;white-space:normal;overflow-wrap:anywhere}
+#takeoffPanel51 .takeoffRow51 > button{min-width:0!important;width:auto!important;padding:7px 5px;font-size:11px;white-space:nowrap}
+#takeoffPanel51 .takeoffRow51 > button:nth-child(n+3){grid-row:2}
+#takeoffPanel51 .takeoffRow51{grid-template-columns:22px repeat(7,minmax(0,1fr))}
+#takeoffPanel51 .takeoffRow51 > div{grid-column:2/-1}
+#takeoffPanel51 .takeoffRow51 > button:nth-child(n+3){grid-column:auto}
+#takeoffPanel51 .takeoffRow51 > button:nth-child(3){grid-column:1 / span 2}
+#takeoffPanel51 button,#takeoffPanel51 select{touch-action:manipulation}
+#takeoffPanel51 .takeoffCard51{min-width:0;flex-wrap:wrap;overflow-wrap:anywhere}
+#takeoffPanel51 .takeoffCard51 strong{overflow-wrap:anywhere}
+.takeoffHeader68{position:sticky;top:-12px;z-index:4;display:flex;align-items:center;justify-content:space-between;gap:8px;background:#1c2733;border-bottom:1px solid #42566a;margin:-12px -12px 12px;padding:12px;cursor:grab;touch-action:none;user-select:none;border-radius:14px 14px 0 0}
+.takeoffHeader68:active{cursor:grabbing}
+.takeoffHeader68 strong{font-size:16px;color:#f2f7fc}
+.takeoffHeader68 small{display:block;font-size:10px;color:#b5c8db;margin-top:2px}
+#takeoffClose68{min-width:40px;min-height:38px;background:#34485b;border:1px solid #65809a;border-radius:9px;color:#fff;font-size:21px;cursor:pointer}
+@media(max-width:600px){#takeoffPanel51{top:8px!important;right:8px!important;left:auto;width:calc(100vw - 16px);max-height:calc(100dvh - 16px);height:min(82dvh,720px);min-width:0;resize:none}#takeoffPanel51 .takeoffRow51{grid-template-columns:22px repeat(7,minmax(0,1fr))}#takeoffPanel51 .takeoffRow51 > button{font-size:10px;padding:7px 2px}#takeoffPanel51 .takeoffRow51 > button:nth-child(3){grid-column:1 / span 2}}
+
+
+/* v69: usable takeoff workspace */
+#takeoffPanel51{width:min(520px,calc(100vw - 24px))!important;max-width:calc(100vw - 24px)!important;height:min(78dvh,790px);background:#152331!important;border:1px solid #47708c!important;box-shadow:0 20px 65px #0009!important}
+#takeoffPanel51 .takeoffHeader68{background:#20364a!important;border-bottom-color:#41627c!important}
+#takeoffPanel51 .takeoffHeader68 strong{font-size:18px}
+#takeoffPanel51 #takeoffSummary51{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px!important}
+#takeoffPanel51 #takeoffSummary51 .takeoffCard51{display:flex;flex-direction:column;gap:6px;padding:12px 8px;min-height:65px}
+#takeoffPanel51 #takeoffSummary51 .takeoffCard51 span{font-size:11px}
+#takeoffPanel51 #takeoffSummary51 .takeoffCard51 strong{font-size:15px;line-height:1.3}
+#takeoffPanel51 .takeoffRow51{display:grid!important;grid-template-columns:26px repeat(6,minmax(0,1fr))!important;gap:7px!important;padding:12px!important;background:#203244!important;border:1px solid #3b5971!important}
+#takeoffPanel51 .takeoffRow51 > input[type=checkbox]{grid-column:1;grid-row:1;align-self:start;min-width:18px;min-height:18px}
+#takeoffPanel51 .takeoffRow51 > div{grid-column:2/-1!important;grid-row:1!important;overflow-wrap:anywhere;white-space:normal;line-height:1.55}
+#takeoffPanel51 .takeoffRow51 > button{grid-row:2!important;grid-column:auto!important;min-width:0!important;width:100%!important;min-height:36px;padding:7px 3px!important;font-size:11px!important;white-space:normal!important;overflow-wrap:anywhere}
+#takeoffPanel51 .takeoffRow51 > button:nth-child(3){grid-column:1 / span 2!important}
+#takeoffPanel51 button{border-radius:9px;min-height:37px}
+#takeoffPanel51 select{min-width:0;width:100%;font-size:12px}
+#takeoffPanel51 #takeoffList51{padding-bottom:12px}
+#progressCostPanel62{position:fixed!important;top:85px!important;left:14px!important;right:auto!important;width:min(410px,calc(100vw - 28px))!important;max-width:calc(100vw - 28px);max-height:calc(100dvh - 110px)!important;box-sizing:border-box;overflow-y:auto!important;z-index:1001!important;padding-top:56px!important;border:1px solid #4b7592!important;background:#152331!important;box-shadow:0 18px 55px #0009!important}
+#progressClose69{position:sticky;top:-56px;z-index:10;display:flex;align-items:center;justify-content:space-between;background:#20364a;padding:10px 12px;margin:-56px -12px 14px;min-height:44px;border-bottom:1px solid #47708c}
+#progressClose69 button{min-height:35px;min-width:40px;font-size:21px;background:#38546b;color:white;border:1px solid #65809a;border-radius:9px}
+#progressCostPanel62 input,#progressCostPanel62 select{min-width:0;max-width:100%;box-sizing:border-box}
+#progressCostPanel62 button{white-space:normal;min-height:36px}
+@media(max-width:980px){#progressCostPanel62{left:8px!important;top:8px!important;width:min(520px,calc(100vw - 16px))!important;max-height:calc(100dvh - 16px)!important}}
+@media(max-width:600px){#takeoffPanel51{top:8px!important;right:8px!important;width:calc(100vw - 16px)!important;height:min(88dvh,760px)!important}#takeoffPanel51 #takeoffSummary51{grid-template-columns:1fr 1fr}#takeoffPanel51 .takeoffRow51{grid-template-columns:24px repeat(3,minmax(0,1fr))!important}#takeoffPanel51 .takeoffRow51 > button{grid-row:auto!important;grid-column:auto!important}#takeoffPanel51 .takeoffRow51 > button:nth-child(3){grid-column:1 / span 2!important}#progressCostPanel62{left:8px!important;top:8px!important;width:calc(100vw - 16px)!important;max-height:calc(100dvh - 16px)!important}}
 </style>
 </head>
 <body>
@@ -806,7 +854,7 @@ body.light33 #progressCostPanel62{background:#f8fafc!important;color:#18202a!imp
 </div>
 
 <div id="takeoffPanel51" style="display:none">
-  <div class="panelTitle26">Metraj</div>
+  <div class="takeoffHeader68" id="takeoffDrag68"><div><strong>Metraj</strong><small>Başlıktan tutup taşı • sağ alt köşeden boyutlandır</small></div><button type="button" id="takeoffClose68" aria-label="Metraj panelini kapat" title="Kapat">×</button></div>
   
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px">
   <select id="takeoffGroup52" style="min-height:38px;border-radius:9px;padding:6px">
@@ -910,7 +958,7 @@ body.light33 #progressCostPanel62{background:#f8fafc!important;color:#18202a!imp
 <input id="takeoffProject53" type="text" placeholder="Metraj adı / proje bölümü" style="padding:8px;border-radius:9px;border:1px solid #34404d;background:#202832;color:#eef3f8">
   <div style="display:flex;gap:6px">
     <button id="takeoffSave53" style="flex:1">Metrajı Kaydet</button>
-    <button id="takeoffExport53" style="flex:1">CSV Dışa Aktar</button>
+    <button id="takeoffExport53" style="flex:1">Excel (.xlsx) İndir</button>
   </div>
 </div>
 
@@ -2370,7 +2418,7 @@ document.getElementById('takeoffCategory54').onchange=e=>{
   takeoffDefaultCategory54=e.target.value;saveCostPrefs54();
 };
 document.getElementById('takeoffSave53').onclick=saveTakeoff53;
-document.getElementById('takeoffExport53').onclick=exportTakeoffCsv53;
+document.getElementById('takeoffExport53').onclick=exportTakeoffXlsx71;
 document.getElementById('miniMapToggle58').onclick=toggleMiniMap58;
 document.getElementById('miniMap58').addEventListener('pointerdown',e=>miniMapGoto58(e.clientX,e.clientY));
 document.getElementById('viewPresetBtn57').onclick=()=>togglePanel27(document.getElementById('viewPresetPanel57'));
@@ -4749,9 +4797,173 @@ function loadTakeoff53(){
 
 function csvEscape53(v){
   const s=String(v??'');
-  return /[",\n]/.test(s)?`"${s.replace(/"/g,'""')}"`:s;
+  const safe=/^[\s]*[=+@\-]/.test(s)?'\u0027'+s:s;
+  return /[",\n]/.test(safe)?`"${safe.replace(/"/g,'""')}"`:safe;
 }
 
+// Excel TR: noktalivirgul sutun ayraci ve formullerden korunma.
+function csvEscape70(v){
+  const raw=String(v??'');
+  const safe=/^\s*[=+@-]/.test(raw)?"'"+raw:raw;
+  return /[;"\r\n]/.test(safe)?'"'+safe.replace(/"/g,'""')+'"':safe;
+}
+
+// v74: Excel 2010 uyumlu, Internet gerektirmeyen Office Open XML (.xlsx) olusturucu.
+// ZIP store metodu kullanir; dis kutuphane ve CDN gerektirmez.
+function xlsxXml71(s){return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&apos;').replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g,'');}
+function xlsxCol71(n){let s='';for(n++;n;n=Math.floor((n-1)/26))s=String.fromCharCode(65+(n-1)%26)+s;return s;}
+function xlsxZip71(files){
+  const enc=new TextEncoder(),chunks=[],central=[];let offset=0;
+  const crcTable=new Uint32Array(256);
+  for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=(c&1)?0xEDB88320^(c>>>1):c>>>1;crcTable[n]=c>>>0;}
+  const crc32=b=>{let c=0xFFFFFFFF;for(const v of b)c=crcTable[(c^v)&255]^(c>>>8);return (c^0xFFFFFFFF)>>>0;};
+  const u16=(v,a,o)=>{a[o]=v&255;a[o+1]=(v>>>8)&255;};
+  const u32=(v,a,o)=>{u16(v&65535,a,o);u16(v>>>16,a,o+2);};
+  for(const [name,data] of files){
+    const nb=enc.encode(name),db=enc.encode(data),crc=crc32(db),lh=new Uint8Array(30+nb.length);
+    u32(0x04034b50,lh,0);u16(20,lh,4);u16(0x0800,lh,6);u16(0,lh,8);u32(crc,lh,14);u32(db.length,lh,18);u32(db.length,lh,22);u16(nb.length,lh,26);lh.set(nb,30);
+    chunks.push(lh,db);
+    const ch=new Uint8Array(46+nb.length);u32(0x02014b50,ch,0);u16(20,ch,4);u16(20,ch,6);u16(0x0800,ch,8);u32(crc,ch,16);u32(db.length,ch,20);u32(db.length,ch,24);u16(nb.length,ch,28);u32(offset,ch,42);ch.set(nb,46);central.push(ch);offset+=lh.length+db.length;
+  }
+  const cdLen=central.reduce((n,x)=>n+x.length,0),end=new Uint8Array(22);
+  u32(0x06054b50,end,0);u16(files.length,end,8);u16(files.length,end,10);u32(cdLen,end,12);u32(offset,end,16);
+  return new Blob([...chunks,...central,end],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+}
+function buildTakeoffXlsx71(items,project,currency,discountRate,vatRate){
+  const lines=[],currencyFormat='#,##0.00 "'+String(currency).replace(/"/g,'')+'"';
+  const push=(kind,cells)=>{lines.push({kind,cells});return lines.length;};
+  push('title',[project+' | METRAJ RAPORU']);
+  push('subtitle',['Katmanlara göre gruplandırılmış metraj • '+new Date().toLocaleDateString('tr-TR')]);
+  push('blank',[]);
+  push('header',['Katman','Kalem Adı','Kategori','Tür','Uzunluk','Alan','Birim','Miktar','Çarpan','Toplam Miktar','Birim Fiyat','Tutar','Not']);
+  const groups=new Map();
+  for(const item of items){const layer=String(item.layer||'KATMAN YOK');if(!groups.has(layer))groups.set(layer,[]);groups.get(layer).push(item);}
+  const layerTotals=[];
+  for(const layer of [...groups.keys()].sort((a,b)=>a.localeCompare(b,'tr'))){
+    const group=groups.get(layer);push('layer',[layer+'  ('+group.length+' kalem)']);
+    const unitGroups=new Map(),amountRows=[];
+    for(const item of group){
+      const u=unitLabel55(item),q=Number(scaledQuantity55(item)),mult=Number(itemMultiplier59(item)),price=Number(item.unitPrice54||0);
+      const row=push('item',[layer,item.name59||item.type||'Kalem',item.category54||'Genel',item.type||'',item.length?formatLinearList19(item.length):'',item.area?formatAreaList19(item.area):'',u,q,mult,{formula:`H${lines.length+1}*I${lines.length+1}`},price,{formula:`J${lines.length+1}*K${lines.length+1}`},item.note53||'']);
+      if(!unitGroups.has(u))unitGroups.set(u,[]);unitGroups.get(u).push(row);amountRows.push(row);
+    }
+    for(const [unit,rs] of unitGroups){push('unit',[layer,unit+' TOPLAMI','','','','',unit,'','',{formula:rs.map(r=>'J'+r).join('+')},'',{formula:rs.map(r=>'L'+r).join('+')}]);}
+    const layerRow=push('layerTotal',[layer+' TOPLAM','','','','','','','','','','',{formula:amountRows.length?amountRows.map(r=>'L'+r).join('+'):'0'}]);
+    layerTotals.push(layerRow);push('blank',[]);
+  }
+  const sub=push('subtotal',['ARA TOPLAM','','','','','','','','','','',{formula:layerTotals.length?layerTotals.map(r=>'L'+r).join('+'):'0'}]);
+  const disc=push('summary',['İskonto (%)','','','','','','','','','',Number(discountRate)||0,{formula:`L${sub}*K${sub+1}/100`}]);
+  const after=push('summary',['İskonto Sonrası','','','','','','','','','','',{formula:`L${sub}-L${disc}`}]);
+  const vat=push('summary',['KDV (%)','','','','','','','','','',Number(vatRate)||0,{formula:`L${after}*K${after+1}/100`}]);
+  push('grand',['GENEL TOPLAM','','','','','','','','','','',{formula:`L${after}+L${vat}`}]);
+  const style={title:1,subtitle:2,header:3,layer:4,item:5,unit:6,layerTotal:7,subtotal:8,summary:8,grand:9,blank:0};
+  let xml='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><dimension ref="A1:M'+lines.length+'"/><sheetViews><sheetView showGridLines="0" workbookViewId="0"><pane ySplit="4" topLeftCell="A5" activePane="bottomLeft" state="frozen"/><selection pane="bottomLeft" activeCell="A5" sqref="A5"/></sheetView></sheetViews><sheetFormatPr defaultRowHeight="15"/><cols>';
+  [19,27,16,16,17,18,11,14,12,18,17,20,32].forEach((w,i)=>{xml+=`<col min="${i+1}" max="${i+1}" width="${w}" customWidth="1"/>`;});xml+='</cols><sheetData>';
+  lines.forEach((row,idx)=>{
+    const rn=idx+1;xml+=`<row r="${rn}" ht="${row.kind==='title'?32:row.kind==='header'?28:row.kind==='layer'?25:22}" customHeight="1">`;
+    row.cells.forEach((val,ci)=>{
+      if(val===undefined||val===null||val==='')return;
+      const ref=xlsxCol71(ci)+rn;let st=style[row.kind];
+      if((row.kind==='item'||row.kind==='unit')&&[7,8,9,10,11].includes(ci))st=ci===11?11:ci===10?12:10;
+      if(row.kind==='summary'&&ci===10)st=10;
+      const attr=` r="${ref}" s="${st}"`;
+      if(typeof val==='object'&&val.formula){xml+=`<c${attr}><f>${xlsxXml71(val.formula)}</f><v>0</v></c>`;}
+      else if(typeof val==='number'&&Number.isFinite(val)){xml+=`<c${attr}><v>${val}</v></c>`;}
+      else xml+=`<c${attr} t="inlineStr"><is><t xml:space="preserve">${xlsxXml71(val)}</t></is></c>`;
+    });xml+='</row>';
+  });
+  xml+='</sheetData><mergeCells count="'+(2+[...groups.keys()].length)+'"><mergeCell ref="A1:M1"/><mergeCell ref="A2:M2"/>';
+  lines.forEach((r,i)=>{if(r.kind==='layer')xml+=`<mergeCell ref="A${i+1}:M${i+1}"/>`;});xml+='</mergeCells><autoFilter ref="A4:M4"/><pageMargins left="0.3" right="0.3" top="0.5" bottom="0.5" header="0.2" footer="0.2"/></worksheet>';
+  const styles=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><numFmts count="2"><numFmt numFmtId="164" formatCode="#,##0.00"/><numFmt numFmtId="165" formatCode="${xlsxXml71(currencyFormat)}"/></numFmts><fonts count="4"><font><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="16"/><color rgb="FFFFFFFF"/><name val="Calibri"/></font><font><b/><sz val="11"/><color rgb="FFFFFFFF"/></font><font><b/><sz val="11"/><color rgb="FF17324D"/></font></fonts><fills count="6"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FF17324D"/><bgColor indexed="64"/></patternFill></fill><fill><patternFill patternType="solid"><fgColor rgb="FF087E8B"/><bgColor indexed="64"/></patternFill></fill><fill><patternFill patternType="solid"><fgColor rgb="FFEAF3F6"/><bgColor indexed="64"/></patternFill></fill><fill><patternFill patternType="solid"><fgColor rgb="FFD9F3EC"/><bgColor indexed="64"/></patternFill></fill></fills><borders count="1"><border><left/><right/><top/><bottom/><diagonal/></border></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="13"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/><xf numFmtId="0" fontId="1" fillId="2" borderId="0" xfId="0" applyFont="1" applyFill="1"/><xf numFmtId="0" fontId="3" fillId="4" borderId="0" xfId="0" applyFill="1"/><xf numFmtId="0" fontId="2" fillId="3" borderId="0" xfId="0" applyFont="1" applyFill="1"/><xf numFmtId="0" fontId="2" fillId="2" borderId="0" xfId="0" applyFont="1" applyFill="1"/><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/><xf numFmtId="0" fontId="3" fillId="4" borderId="0" xfId="0" applyFill="1"/><xf numFmtId="165" fontId="3" fillId="4" borderId="0" xfId="0" applyFill="1" applyNumberFormat="1"/><xf numFmtId="165" fontId="3" fillId="5" borderId="0" xfId="0" applyFill="1" applyNumberFormat="1"/><xf numFmtId="165" fontId="2" fillId="3" borderId="0" xfId="0" applyFill="1" applyNumberFormat="1"/><xf numFmtId="164" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1"/><xf numFmtId="165" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1"/><xf numFmtId="165" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1"/></cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>`;
+  const files=[
+    ['[Content_Types].xml','<?xml version="1.0" encoding="UTF-8"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/></Types>'],
+    ['_rels/.rels','<?xml version="1.0" encoding="UTF-8"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>'],
+    ['xl/workbook.xml','<?xml version="1.0" encoding="UTF-8"?><workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets><sheet name="Metraj" sheetId="1" r:id="rId1"/></sheets><calcPr calcId="0" calcMode="auto" fullCalcOnLoad="1" forceFullCalc="1"/></workbook>'],
+    ['xl/_rels/workbook.xml.rels','<?xml version="1.0" encoding="UTF-8"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>'],
+    ['xl/styles.xml',styles],['xl/worksheets/sheet1.xml',xml]
+  ];
+  return xlsxZip71(files);
+}
+async function exportTakeoffXlsx71(){
+  const btn=document.getElementById('takeoffExport53');
+  if(btn.disabled)return;
+  btn.disabled=true;const old=btn.textContent;btn.textContent='Excel hazırlanıyor...';
+  try{
+    if(!window.ExcelJS){
+      await new Promise((resolve,reject)=>{
+        const script=document.createElement('script');
+        script.src='https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js';
+        script.onload=()=>window.ExcelJS?resolve():reject(new Error('ExcelJS yüklenemedi'));
+        script.onerror=()=>reject(new Error('İnternet bağlantısı veya Excel kütüphanesi engellendi'));
+        document.head.appendChild(script);
+      });
+    }
+    const wb=new ExcelJS.Workbook();wb.creator='CAD Reader Pro';wb.calcProperties.fullCalcOnLoad=true;
+    const ws=wb.addWorksheet('Metraj',{views:[{state:'frozen',ySplit:4}]});
+    ws.columns=[19,27,16,16,17,18,11,14,12,18,17,20,32].map(width=>({width}));
+    const project=String(document.getElementById('takeoffProject53')?.value||'Metraj').trim()||'Metraj';
+    const currency=String(takeoffCurrency54||'TRY');
+    const moneyFmt='#,##0.00 "'+currency.replace(/"/g,'')+'"';
+    ws.mergeCells('A1:M1');ws.getCell('A1').value=project+' | METRAJ RAPORU';
+    ws.mergeCells('A2:M2');ws.getCell('A2').value='Katmanlara göre gruplandırılmış metraj • '+new Date().toLocaleDateString('tr-TR');
+    ws.addRow([]);
+    const headers=['Katman','Kalem Adı','Kategori','Tür','Uzunluk','Alan','Birim','Miktar','Çarpan','Toplam Miktar','Birim Fiyat','Tutar','Not'];
+    ws.addRow(headers);
+    const groups=new Map();
+    for(const item of takeoffItems51){const layer=String(item.layer||'KATMAN YOK');if(!groups.has(layer))groups.set(layer,[]);groups.get(layer).push(item);}
+    const layerTotals=[];
+    const addFormula=(formula,result=0)=>({formula,result});
+    const sumRefs=refs=>refs.length?refs.join('+'):'0';
+    for(const layer of [...groups.keys()].sort((a,b)=>a.localeCompare(b,'tr'))){
+      const group=groups.get(layer);
+      const groupHeader=ws.addRow([layer+' ('+group.length+' kalem)']);
+      ws.mergeCells(`A${groupHeader.number}:M${groupHeader.number}`);groupHeader._reportKind='layer';
+      const unitGroups=new Map(),amountRows=[];
+      for(const item of group){
+        const u=unitLabel55(item),q=Number(scaledQuantity55(item))||0,mult=Number(itemMultiplier59(item))||0,price=Number(item.unitPrice54)||0;
+        const n=ws.rowCount+1;
+        const row=ws.addRow([layer,item.name59||item.type||'Kalem',item.category54||'Genel',item.type||'',item.length?formatLinearList19(item.length):'',item.area?formatAreaList19(item.area):'',u,q,mult,addFormula(`H${n}*I${n}`,q*mult),price,addFormula(`J${n}*K${n}`,q*mult*price),item.note53||'']);
+        row._reportKind='item';amountRows.push({n,total:q*mult*price});
+        if(!unitGroups.has(u))unitGroups.set(u,[]);unitGroups.get(u).push({n,total:q*mult*price,qty:q*mult});
+      }
+      for(const [u,rs] of unitGroups){const row=ws.addRow([layer,u+' TOPLAMI','','','','',u,'','',addFormula(sumRefs(rs.map(r=>'J'+r.n)),rs.reduce((a,r)=>a+r.qty,0)),'',addFormula(sumRefs(rs.map(r=>'L'+r.n)),rs.reduce((a,r)=>a+r.total,0))]);row._reportKind='unit';}
+      const lr=ws.addRow([layer+' TOPLAM','','','','','','','','','','',addFormula(sumRefs(amountRows.map(r=>'L'+r.n)),amountRows.reduce((a,r)=>a+r.total,0))]);lr._reportKind='layerTotal';layerTotals.push({n:lr.number,total:amountRows.reduce((a,r)=>a+r.total,0)});
+      ws.addRow([]);
+    }
+    const subtotal=layerTotals.reduce((a,r)=>a+r.total,0);
+    const sub=ws.addRow(['ARA TOPLAM','','','','','','','','','','',addFormula(sumRefs(layerTotals.map(r=>'L'+r.n)),subtotal)]);sub._reportKind='subtotal';
+    const discRate=Number(takeoffDiscount59)||0,vatRate=Number(takeoffVat59)||0;
+    const disc=ws.addRow(['İskonto (%)','','','','','','','','','',discRate,addFormula(`L${sub.number}*K${sub.number+1}/100`,subtotal*discRate/100)]);disc._reportKind='summary';
+    const afterVal=subtotal*(1-discRate/100);
+    const after=ws.addRow(['İskonto Sonrası','','','','','','','','','','',addFormula(`L${sub.number}-L${disc.number}`,afterVal)]);after._reportKind='summary';
+    const vat=ws.addRow(['KDV (%)','','','','','','','','','',vatRate,addFormula(`L${after.number}*K${after.number+1}/100`,afterVal*vatRate/100)]);vat._reportKind='summary';
+    const grand=ws.addRow(['GENEL TOPLAM','','','','','','','','','','',addFormula(`L${after.number}+L${vat.number}`,afterVal*(1+vatRate/100))]);grand._reportKind='grand';
+    ws.autoFilter={from:'A4',to:'M4'};
+    ws.eachRow(row=>{
+      const kind=row._reportKind||(row.number===1?'title':row.number===2?'subtitle':row.number===4?'header':'');
+      row.height=kind==='title'?32:kind==='header'?28:kind==='layer'?25:22;
+      row.eachCell({includeEmpty:false},cell=>{
+        cell.alignment={vertical:'middle',wrapText:true};
+        if(['title','header','layer','grand'].includes(kind)){
+          cell.fill={type:'pattern',pattern:'solid',fgColor:{argb:kind==='header'?'FF087E8B':'FF17324D'}};
+          cell.font={name:'Calibri',size:kind==='title'?16:11,bold:true,color:{argb:'FFFFFFFF'}};
+        }else if(['subtotal','summary','layerTotal','unit'].includes(kind)){
+          cell.fill={type:'pattern',pattern:'solid',fgColor:{argb:kind==='unit'?'FFEAF3F6':'FFD9F3EC'}};
+          cell.font={name:'Calibri',size:11,bold:true,color:{argb:'FF17324D'}};
+        }
+        if([8,9,10,11,12].includes(cell.col)&&kind==='item')cell.numFmt=cell.col===11||cell.col===12?moneyFmt:'#,##0.00';
+        if(cell.col===12&&['unit','layerTotal','subtotal','summary','grand'].includes(kind))cell.numFmt=moneyFmt;
+      });
+    });
+    const buffer=await wb.xlsx.writeBuffer();
+    const blob=new Blob([buffer],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+    const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;
+    a.download=(project.replace(/[^a-zA-Z0-9_\-\u00C0-\u024F\u1E00-\u1EFF]+/g,'_')||'Metraj')+'_Katmanli.xlsx';
+    document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),30000);
+    showToast('Excel raporu indirildi (ExcelJS)');
+  }catch(err){console.error('ExcelJS export:',err);alert('Excel raporu oluşturulamadı: '+err.message+'\nİnternet bağlantısını kontrol edin.');}
+  finally{btn.disabled=false;btn.textContent=old;}
+}
 function exportTakeoffCsv53(){
   const rows=[['Metraj','Kalem Adı','Kategori','Tür','Katman','Uzunluk','Alan','Birim Türü','Miktar Çarpanı','Birim Fiyat','Tutar','Para Birimi','Not']];
   const project=String(document.getElementById('takeoffProject53')?.value||'Metraj').trim()||'Metraj';
@@ -4772,7 +4984,23 @@ function exportTakeoffCsv53(){
       item.note53||''
     ]);
   }
-  const csv='\ufeff'+rows.map(r=>r.map(csvEscape53).join(',')).join('\n');
+  // Finansal ozet: tum kalemler uzerinden, arama filtresinden bagimsiz.
+  const totals67=financeTotals59(takeoffItems51);
+  const summary67=[
+    ['Ara Toplam',totals67.subtotal],
+    ['Iskonto (%)',takeoffDiscount59],
+    ['Iskonto Tutari',totals67.discount],
+    ['KDV (%)',takeoffVat59],
+    ['KDV Tutari',totals67.vat],
+    ['Genel Toplam',totals67.grand]
+  ];
+  rows.push([]);
+  for(const [label,value] of summary67){
+    const row=Array(13).fill('');
+    row[0]=project;row[1]=label;row[10]=Number(value).toFixed(2);row[11]=takeoffCurrency54;
+    rows.push(row);
+  }
+  const csv='\ufeffsep=;\r\n'+rows.map(r=>r.map(csvEscape70).join(';')).join('\r\n');
   const blob=new Blob([csv],{type:'text/csv;charset=utf-8'});
   const url=URL.createObjectURL(blob);
   const a=document.createElement('a');
@@ -4782,7 +5010,7 @@ function exportTakeoffCsv53(){
   a.click();
   a.remove();
   setTimeout(()=>URL.revokeObjectURL(url),1000);
-  showToast('CSV hazırlandı');
+  showToast('Excel uyumlu CSV indirildi');
 }
 
 function editTakeoffNote53(item){
@@ -5776,5 +6004,48 @@ function progressWarnings64(){
 })();
 </script>
 
+
+<script>
+// v68: metraj kapatma ve sürükleme. Çizim hareketlerine dokunmaz.
+(function(){
+ const panel=document.getElementById('takeoffPanel51');
+ const bar=document.getElementById('takeoffDrag68');
+ const close=document.getElementById('takeoffClose68');
+ if(!panel||!bar||!close)return;
+ close.addEventListener('click',function(ev){ev.preventDefault();ev.stopPropagation();panel.style.display='none';});
+ let drag=null;
+ bar.addEventListener('pointerdown',function(ev){
+  if(ev.target.closest('button'))return;
+  const r=panel.getBoundingClientRect();
+  drag={x:ev.clientX,y:ev.clientY,left:r.left,top:r.top};
+  try{bar.setPointerCapture(ev.pointerId)}catch(e){}
+  ev.preventDefault();
+ });
+ bar.addEventListener('pointermove',function(ev){
+  if(!drag)return;
+  const x=Math.max(0,Math.min(window.innerWidth-70,drag.left+ev.clientX-drag.x));
+  const y=Math.max(0,Math.min(window.innerHeight-70,drag.top+ev.clientY-drag.y));
+  panel.style.setProperty('left',x+'px','important');
+  panel.style.setProperty('right','auto','important');
+  panel.style.setProperty('top',y+'px','important');
+ });
+ function stop(){drag=null}
+ bar.addEventListener('pointerup',stop);bar.addEventListener('pointercancel',stop);
+ window.addEventListener('keydown',function(ev){if(ev.key==='Escape'&&panel.style.display!=='none'){panel.style.display='none';}});
+})();
+</script>
+
+
+<script>
+(function(){
+ const progress=document.getElementById('progressCostPanel62');
+ if(!progress)return;
+ const bar=document.createElement('div');bar.id='progressClose69';
+ const label=document.createElement('strong');label.textContent='Hakediş ve Maliyet';
+ const btn=document.createElement('button');btn.type='button';btn.textContent='×';btn.title='Hakedişi kapat';btn.setAttribute('aria-label','Hakedişi kapat');
+ btn.addEventListener('click',function(){progress.style.display='none'});
+ bar.append(label,btn);progress.prepend(bar);
+})();
+</script>
 </body>
 </html>
